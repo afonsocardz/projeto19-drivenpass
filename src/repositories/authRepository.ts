@@ -6,7 +6,7 @@ export async function create(userData: TUserData) {
 }
 
 export async function getUserByEmail(user: TUserData) {
-  return await prisma.user.findUnique({
+  return await prisma.user.findFirstOrThrow({
     where:
     {
       email: user.email
