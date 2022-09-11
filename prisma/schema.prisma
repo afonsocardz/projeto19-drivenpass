@@ -17,6 +17,7 @@ model User {
   credential Credential[]
   card Card[]
   note Note[]
+  network Network[]
   @@map("users")
 }
 
@@ -60,4 +61,13 @@ model Note {
   user User @relation(fields: [userId], references: [id])
   userId Int
   @@map("notes")
+}
+
+model Network {
+  id Int @id @default(autoincrement())
+  networkName String
+  password String
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  @@map("networks")
 }
