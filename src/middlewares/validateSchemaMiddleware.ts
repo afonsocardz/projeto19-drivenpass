@@ -2,13 +2,12 @@ import { NextFunction, Request, Response } from "express";
 import { ObjectSchema } from "joi";
 
 export default function validateSchema(schema: ObjectSchema) {
-  (req: Request, res: Response, next: NextFunction) => {
+  return (req: Request, res: Response, next: NextFunction) => {
     const data = req.body;
-    const { value, error } = schema.validate(data);
+    const { error } = schema.validate(data);
     if(error){
-      res.sendStatus(422);
+      return res.status(422).send(error.details);
     }
-    res.locals.data = value;
     next();
   }
 }
