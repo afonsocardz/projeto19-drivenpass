@@ -16,3 +16,20 @@ model User {
   password String
   @@map("users")
 }
+
+model Credential {
+  id Int @id @default(autoincrement())
+  url String
+  username String
+  password String
+  credentialName CredentialName[]
+  @@map("credentials")
+}
+
+model CredentialName {
+  id Int @id @default(autoincrement())
+  name String
+  crendetial Credential @relation(fields: [credentialId], references: [id])
+  credentialId Int
+  @@map("credential_names")
+}
