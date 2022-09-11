@@ -17,6 +17,7 @@ async function deleteCredentialById(id: number) {
 
 export async function getCredentialsByUserId(userId: number) {
   const credentials = await credentialRepository.getCredentialsByUserId(userId);
+  credentials.map(credential => decryptCredential(credential));
   return credentials;
 }
 
