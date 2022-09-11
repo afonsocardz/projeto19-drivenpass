@@ -14,3 +14,11 @@ export async function createCredential(credential: TCredentialData, userId: numb
 export async function getCredentialById(id: number, userId: number) {
   return await prisma.credential.findFirst({ where: { id, userId } });
 }
+
+export async function getCredentialsByUserId(userId: number) {
+  return await prisma.credential.findMany({ where: { userId } })
+}
+
+export async function deleteCredentialById(id: number) {
+  await prisma.credential.delete({ where: { id } });
+}

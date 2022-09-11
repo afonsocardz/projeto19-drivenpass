@@ -6,20 +6,34 @@ import { Credential } from "@prisma/client";
 const SECRET: string | undefined = process.env.SECRET || 'banana';
 const cryptr: Cryptr = new Cryptr(SECRET);
 
+export async function deleteCredential(id: number, userId: number) {
+  await isCredentialExists(id, userId);
+  await deleteCredentialById(id);
+}
+
+async function deleteCredentialById(id: number) {
+  await credentialRepository.deleteCredentialById(id);
+}
+
+export async function getCredentialsByUserId(userId: number) {
+  const credentials = await credentialRepository.getCredentialsByUserId(userId);
+  return credentials;
+}
+
 export async function getCredentialById(id: number, userId: number) {
   const credential = await isCredentialExists(id, userId);
   decryptCredential(credential);
   return credential;
 }
 
-function decryptCredential(credentialData: Credential){
+function decryptCredential(credentialData: Credential) {
   credentialData.password = cryptr.decrypt(credentialData.password);
 }
 
 async function isCredentialExists(id: number, userId: number) {
   const credential = await credentialRepository.getCredentialById(id, userId);
-  if(!credential){
-    throw {type: "notFound", message: "Credential doesn't exists or it can't be accessed"};
+  if (!credential) {
+    throw { type: "notFound", message: "Credential doesn't exists or it can't be accessed" };
   }
   return credential;
 }

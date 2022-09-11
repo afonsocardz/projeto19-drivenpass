@@ -16,3 +16,16 @@ export async function getCredentialById(req: Request, res: Response) {
   const credential = await credentialService.getCredentialById(id, userId);
   res.status(200).send(credential);
 }
+
+export async function getCredentialsByUserId(req: Request, res: Response) {
+  const { id: userId }: User = res.locals.id;
+  const credentials = await credentialService.getCredentialsByUserId(userId);
+  res.status(200).send(credentials);
+}
+
+export async function deleteCredential(req: Request, res: Response) {
+  const { id: userId }: User = res.locals.id;
+  const id: number = Number(req.params.id);
+  await credentialService.deleteCredential(id, userId);
+  res.sendStatus(200);
+}
