@@ -10,3 +10,7 @@ export async function createCredential(credential: TCredentialData, userId: numb
     data: { ...credential, userId }
   });
 }
+
+export async function getCredentialById(id: number, userId: number) {
+  return await prisma.credential.findFirst({ where: { id, userId } });
+}
