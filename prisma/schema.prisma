@@ -22,14 +22,6 @@ model Credential {
   url String
   username String
   password String
-  credentialName CredentialName[]
+  title String
   @@map("credentials")
-}
-
-model CredentialName {
-  id Int @id @default(autoincrement())
-  name String
-  crendetial Credential @relation(fields: [credentialId], references: [id])
-  credentialId Int
-  @@map("credential_names")
 }
