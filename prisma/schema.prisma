@@ -15,6 +15,7 @@ model User {
   email String @unique
   password String
   credential Credential[]
+  card Card[]
   @@map("users")
 }
 
@@ -27,4 +28,25 @@ model Credential {
   user User @relation(fields: [userId],references: [id])
   userId Int 
   @@map("credentials")
+}
+
+enum CardType {
+  DEBIT
+  CREDIT
+  DEBIT_CREDIT
+}
+
+model Card {
+  id Int @id @default(autoincrement())
+  number String @unique
+  securityCode Int
+  cardholderName String
+  expirationDate DateTime
+  password String
+  isVirtual Boolean
+  type CardType
+  title String
+  user User @relation(fields: [userId],references: [id])
+  userId Int 
+  @@map("cards")
 }
