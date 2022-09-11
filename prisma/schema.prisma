@@ -39,9 +39,9 @@ enum CardType {
 model Card {
   id Int @id @default(autoincrement())
   number String @unique
-  securityCode Int
+  securityCode String
   cardholderName String
-  expirationDate DateTime
+  expirationDate String
   password String
   isVirtual Boolean
   type CardType
