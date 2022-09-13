@@ -10,8 +10,8 @@ async function signUp(req: Request, res: Response) {
 
 async function login(req: Request, res: Response) {
   const user: TUserData = req.body;
-  const token: object = await authService.login(user);
-  return res.status(200).send(token);
+  const token = await authService.login(user);
+  res.status(200).send(token);
 }
 
 export { signUp, login }
