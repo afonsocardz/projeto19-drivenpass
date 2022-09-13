@@ -1,3 +1,4 @@
+import { User } from "@prisma/client";
 import { prisma } from "../config/database";
 import { TUserData } from "../types/userTypes";
 
@@ -6,10 +7,11 @@ export async function create(userData: TUserData) {
 }
 
 export async function getUserByEmail(user: TUserData) {
-  return await prisma.user.findFirstOrThrow({
+  const userFound: User[] =  await prisma.user.findMany({
     where:
     {
       email: user.email
     }
   });
+  return userFound[0];
 }

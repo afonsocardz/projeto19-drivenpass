@@ -2,33 +2,32 @@ import bcrypt from "bcrypt";
 import { TUserData } from "../types/userTypes";
 import * as authRepository from '../repositories/authRepository';
 import { signToken } from "./tokenService";
+import { User } from "@prisma/client";
 
 export async function signUp(userData: TUserData) {
-  await isUserExists(userData);
   encyptPassword(userData);
   await authRepository.create(userData);
 }
 
 export async function login(userData: TUserData) {
-  const user = await validatePassword(userData);
+  const user: User = await isUserExists(userData);
+  validatePassword(userData, user);
   return signToken(user);
 }
 
 
-async function validatePassword(userData: TUserData) {
-  const user = await authRepository.getUserByEmail(userData);
+function validatePassword(userData: TUserData, user:User) {
+  if(!user){
+    throw {type: 'notAuthorized'};
+  }
   const isValid: boolean = bcrypt.compareSync(userData.password, user.password)
   if (!isValid){
     throw {type: 'notAuthorized'};
   }
-  return user;
 }
 
 async function isUserExists(userData: TUserData) {
-  const user = await authRepository.getUserByEmail(userData);
-  if (user) {
-    throw { type: 'conflict', message: 'E-mail is been used by another user already' }
-  }
+  return await authRepository.getUserByEmail(userData);
 }
 
 function encyptPassword(user: TUserData) {
