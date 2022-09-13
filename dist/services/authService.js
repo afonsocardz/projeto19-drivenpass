@@ -41,7 +41,6 @@ const authRepository = __importStar(require("../repositories/authRepository"));
 const tokenService_1 = require("./tokenService");
 function signUp(userData) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield isUserExists(userData);
         encyptPassword(userData);
         yield authRepository.create(userData);
     });
@@ -49,27 +48,24 @@ function signUp(userData) {
 exports.signUp = signUp;
 function login(userData) {
     return __awaiter(this, void 0, void 0, function* () {
-        const user = yield validatePassword(userData);
+        const user = yield isUserExists(userData);
+        validatePassword(userData, user);
         return (0, tokenService_1.signToken)(user);
     });
 }
 exports.login = login;
-function validatePassword(userData) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const user = yield authRepository.getUserByEmail(userData);
-        const isValid = bcrypt_1.default.compareSync(userData.password, user.password);
-        if (!isValid) {
-            throw { type: 'notAuthorized' };
-        }
-        return user;
-    });
+function validatePassword(userData, user) {
+    if (!user) {
+        throw { type: 'notAuthorized' };
+    }
+    const isValid = bcrypt_1.default.compareSync(userData.password, user.password);
+    if (!isValid) {
+        throw { type: 'notAuthorized' };
+    }
 }
 function isUserExists(userData) {
     return __awaiter(this, void 0, void 0, function* () {
-        const user = yield authRepository.getUserByEmail(userData);
-        if (user) {
-            throw { type: 'conflict', message: 'E-mail is been used by another user already' };
-        }
+        return yield authRepository.getUserByEmail(userData);
     });
 }
 function encyptPassword(user) {

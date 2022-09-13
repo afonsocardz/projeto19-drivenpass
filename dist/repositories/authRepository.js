@@ -9,11 +9,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.errorHandler = void 0;
-function errorHandler(error, req, res, next) {
+exports.getUserByEmail = exports.create = void 0;
+const database_1 = require("../config/database");
+function create(userData) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(error);
-        res.status(500).send(error);
+        yield database_1.prisma.user.create({ data: userData });
     });
 }
-exports.errorHandler = errorHandler;
+exports.create = create;
+function getUserByEmail(user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const userFound = yield database_1.prisma.user.findMany({
+            where: {
+                email: user.email
+            }
+        });
+        return userFound[0];
+    });
+}
+exports.getUserByEmail = getUserByEmail;

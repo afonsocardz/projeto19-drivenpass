@@ -46,7 +46,7 @@ function login(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = req.body;
         const token = yield authService.login(user);
-        return res.status(200).send(token);
+        res.status(200).send(token);
     });
 }
 exports.login = login;
